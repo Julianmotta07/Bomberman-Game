@@ -1,4 +1,8 @@
-package com.example.integradora3;
+package com.example.integradora3.model;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class Player extends Thread {
 
@@ -8,25 +12,31 @@ public class Player extends Thread {
     private int height;
     private int lives;
     private boolean move;
+    private Circle bomb;
 
-    private 
+    private
 
-    public PlayerThread() {
+    GraphicsContext gc;
+    public Player() {
+
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.move = move;
-        this.gc = gc;
         this.lives = 3;
+        this.bomb = bomb;
     }
-
+    /**
     @Override
     public void run() {
+
         super.run();
+        /*
         while (true) {
 
             gc.setFill(Color.FUCHSIA);
+
             gc.fillOval(obstacle.getCenterX()-obstacle.getRadius(), obstacle.getCenterY()-obstacle.getRadius(), obstacle.getRadius()*2,obstacle.getRadius()*2);
 
             gc.setFill(playerColor);
@@ -51,7 +61,7 @@ public class Player extends Thread {
             }
         }
 
-    }
+    }*/
 
     public boolean isMove() {
         return move;
@@ -61,4 +71,4 @@ public class Player extends Thread {
         this.move = move;
     }
 }
-}
+
