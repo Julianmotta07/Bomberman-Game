@@ -1,4 +1,4 @@
-package com.example.prueba222;
+package com.example.integradora3;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
