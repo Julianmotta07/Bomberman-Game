@@ -1,4 +1,4 @@
-module com.example.prueba222 {
+module com.example.integradora3 {
     requires javafx.controls;
     requires javafx.fxml;
 
