@@ -1,62 +1,136 @@
 package com.example.integradora3.control;
 
 import com.example.integradora3.KeyboardControl;
-import com.example.integradora3.model.DestructibleWall;
-import com.example.integradora3.model.Obstacle;
-import com.example.integradora3.model.ObstaclesThread;
-import com.example.integradora3.model.Player;
+import com.example.integradora3.model.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class GameController extends Thread implements Initializable {
+public class GameController implements Initializable {
 
     @FXML
     private Canvas canvas;
+    @FXML
+    private Label bombsNum;
     private GraphicsContext gc;
     private Player player;
     private ArrayList<Obstacle> obstacles;
-
+    private ArrayList<Item> items;
+    private Image[] itemsBar;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bombsNum.setText("1");
+        items = new ArrayList<>();
+        itemsBar = new Image[3];
+        itemsBar[0] = new Image("file:bomb_icon.png");
         obstacles = new ArrayList<>();
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         canvas.setOnKeyPressed(KeyboardControl::onKeyPressed);
         canvas.setOnKeyReleased(KeyboardControl::onKeyReleased);
         createObstacles();
-        player = new Player(gc,obstacles);
-        //player.start();
-        //ObstaclesThread obstaclesThread = new ObstaclesThread(obstacles, gc);
-        //obstaclesThread.start();
-        //drawObstacles();
-        this.start();
+        player = new Player(gc, obstacles);
+        Thread gameThread = new Thread(() -> {
+            while (true) {
+                Platform.runLater(() -> {
+                    //n
+                    updateBombTimers();
+                    updateSpeed();
+                    //
+                    player.move();
+                    paint();
+                });
+                try {
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        gameThread.start();
     }
 
-    @Override
-    public void run() {
-        super.run();
-        while (true) {
-            player.move();
-            player.draw();
-            drawObstacles();
-            try {
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void updateSpeed(){
+        if (player.getSpeed() != 1){
+            player.decrementTimer();
+            if (player.getSpeedPowerUpTime() <= 0){
+                player.setSpeed(1);
+                player.setSpeedPowerUpTime(420);
+                itemsBar[1] = null;
             }
         }
+    }
+
+    public void drawBar(){
+        int x = 127;
+        for (Image item : itemsBar){
+            if (item != null){
+                gc.drawImage(item,x,3,22,22);
+                x += 30;
+            }
+        }
+        bombsNum.setText(String.valueOf(player.getMaxBombs()- player.getActiveBombs()));
+    }
+
+    public void updateBombTimers() {
+        List<Bomb> bombsToRemove = new ArrayList<>();
+        for (Bomb bomba : player.getBombs()) {
+            bomba.decrementTimer();
+            if (bomba.getTimer() <= 0) {
+                bomba.explode(obstacles, items);
+                bombsToRemove.add(bomba);
+                player.setActiveBombs(player.getActiveBombs()-1);
+            }
+        }
+        player.getBombs().removeAll(bombsToRemove);
+    }
+
+    public void paint(){
+        player.draw();
+        drawObstacles();
+        drawBombs();
+        drawItems();
+        drawBar();
+    }
+
+    public void drawBombs(){
+        for (Bomb bomb : player.getBombs()){
+            bomb.draw();
+        }
+    }
+
+    public void drawItems(){
+        List<Item> itemR = new ArrayList<>();
+        for (Item item : items){
+            item.draw(gc);
+            if (player.touches(item)){
+                ItemType type = item.getType();
+                switch (type){
+                    case BOMB -> {
+                        player.setMaxBombs(player.getMaxBombs() + 1);
+                    }
+                    case SPEED -> {
+                        player.setSpeed(2);
+                        itemsBar[1] = item.getImage();
+                    }
+                    case STRONG -> {
+                        itemsBar[2] = item.getImage();
+                    }
+                }
+                itemR.add(item);
+            }
+        }
+        items.removeAll(itemR);
     }
 
     public void drawObstacles(){
@@ -69,11 +143,11 @@ public class GameController extends Thread implements Initializable {
 
     public void createObstacles(){
         createStaticWalls();
-        createDestructibleWalls();
+       createDestructibleWalls();
     }
 
     public void createDestructibleWalls(){
-        int x = 30, y = 29;
+        int x = 30, y = 30;
         for (int i = 1; i < 320; i++) {
             boolean createWall = false;
             for (int availableSpace : availableSpaces) {
@@ -94,10 +168,14 @@ public class GameController extends Thread implements Initializable {
         }
     }
 
-    private int availableSpaces[] = {3,4,5,6,7,8,22,23,24,
-                                    32,34,36,40,42,44,46,48,52,56,
-                                    59,60,61,62,63,64,65,66,68,69,70,71,72,73,74,75,76,77,78,80,81,82,84,85,86,
-                                    88,90,92,94,98,100,102,104,106,110,114,
+    //3,4,5,6,7,8,22,23,24,
+    //32
+    //49 60 61
+    //88
+    private int availableSpaces[] = {
+                                    34,36,40,42,44,46,48,52,56,
+                                    62,63,64,65,66,68,69,70,71,72,73,74,75,76,77,78,80,81,82,84,85,86,
+                                    90,92,94,98,100,102,104,106,110,114,
                                     122,123,124,126,127,128,134,135,136,138,139,140,142,143,
                                     144,148,152,156,160,164,168,172,
                                     176,177,178,180,181,182,184,185,186,192,193,194,196,197,198,
@@ -107,7 +185,7 @@ public class GameController extends Thread implements Initializable {
                                     296,297,298,312,313,314,315,316,317};
 
     private void createStaticWalls(){
-        Obstacle topEdge = new Obstacle(0,0,1010,21);
+        Obstacle topEdge = new Obstacle(0,0,1010,32);
         obstacles.add(topEdge);
         Obstacle bottomEdge = new Obstacle(0,371,1010,30);
         obstacles.add(bottomEdge);

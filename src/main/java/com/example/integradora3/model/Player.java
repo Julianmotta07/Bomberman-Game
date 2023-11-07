@@ -4,31 +4,63 @@ import com.example.integradora3.KeyboardControl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
+    private boolean spacePressedLastFrame = false;
     private GraphicsContext gc;
-    private Image up1, up2, down1, down2, left1, left2, right1, right2, stop;
+    private Image up1, up2, down1, down2, left1, left2, right1, right2, stop, heart;
     private String direction;
     private int spriteCounter;
     private int spriteNum;
     private int x;
     private int y;
+    private int lifes;
     private int speed;
+    private int maxBombs;
+    private int activeBombs;
     private ArrayList<Obstacle> obstacles;
+    private ArrayList<Bomb> bombs;
+    private int speedPowerUpTime;
 
     public Player(GraphicsContext gc, ArrayList<Obstacle> obstacles) {
-        x = 31;
-        y = 29;
-        speed = 2;
+        bombs = new ArrayList<>();
+        x = 32;
+        y = 32;
+        speed = 1;
         direction = "down";
         spriteNum = 1;
         this.gc = gc;
         this.obstacles = obstacles;
         getPlayerImage();
+        maxBombs = 1;
+        activeBombs = 0;
+        lifes = 3;
+        speedPowerUpTime = 420;
+    }
+
+    public void decrementTimer() {
+        if (speedPowerUpTime > 0) {
+            speedPowerUpTime--;
+        }
+    }
+
+    public int getSpeedPowerUpTime() {
+        return speedPowerUpTime;
+    }
+
+    public void setSpeedPowerUpTime(int speedPowerUpTime) {
+        this.speedPowerUpTime = speedPowerUpTime;
+    }
+
+    public int getMaxBombs() {
+        return maxBombs;
+    }
+
+    public void setMaxBombs(int maxBombs) {
+        this.maxBombs = maxBombs;
     }
 
     public void getPlayerImage(){
@@ -41,37 +73,18 @@ public class Player {
         left1= new Image("file:b_left_1.png");
         left2 = new Image("file:b_left_2.png");
         stop = new Image("file:b_stop.png");
-    }
-
-
-    public void run() {
-        while (true) {
-            move();
-            draw();
-            drawObstacles();
-            try {
-                Thread.sleep(16);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void drawObstacles() {
-        for (Obstacle obstacle : obstacles) {
-            if (obstacle instanceof DestructibleWall destructibleWall){
-                destructibleWall.draw();
-            }
-        }
+        heart = new Image("file:heart-black.png");
     }
 
     public void move() {
+
         boolean upPressed = KeyboardControl.upPressed;
         boolean downPressed = KeyboardControl.downPressed;
         boolean leftPressed = KeyboardControl.leftPressed;
         boolean rightPressed = KeyboardControl.rightPressed;
+        boolean spacePressed = KeyboardControl.spacePressed;
 
-        if (upPressed || downPressed || leftPressed || rightPressed){
+        if (upPressed || downPressed || leftPressed || rightPressed || spacePressed){
 
             if (upPressed) {
                 if (!checkObstacleCollision(1)){
@@ -96,6 +109,16 @@ public class Player {
                 direction = "right";
             }
 
+            if (spacePressed && !spacePressedLastFrame){
+                if (activeBombs < maxBombs){
+                    List<int[]> coordenadasPermitidas = generarCoordenadasPermitidas(31, 31, 899, 341, 31, 31);
+                    int[] coordenadaMasCercana = calcularCoordenadaMasCercana(coordenadasPermitidas, x, y);
+                    soltarBomba(coordenadaMasCercana);
+                    activeBombs = activeBombs + 1;
+                }
+
+            }
+
             spriteCounter++;
             if(spriteCounter > 10){
                 if (spriteNum == 1){
@@ -109,6 +132,25 @@ public class Player {
             direction = "none";
         }
 
+        spacePressedLastFrame = spacePressed;
+
+    }
+
+    public int getActiveBombs() {
+        return activeBombs;
+    }
+
+    public void setActiveBombs(int activeBombs) {
+        this.activeBombs = activeBombs;
+    }
+
+    public ArrayList<Bomb> getBombs(){
+        return bombs;
+    }
+
+    public void soltarBomba(int[] coord) {
+        Bomb bomb = new Bomb(coord[0], coord[1], gc);
+        bombs.add(bomb);
     }
 
     public void draw() {
@@ -151,9 +193,21 @@ public class Player {
                 image = stop;
                 break;
         }
-        gc.drawImage(image, x, y, 25, 25);
+        gc.drawImage(image, x, y, 30, 29);
+        drawhearts();
     }
 
+    private void drawhearts(){
+        gc.setStroke(Color.BLACK);
+        gc.setFill(Color.valueOf("#eb240efb"));
+        gc.fillRect(38, 3, 78, 22);
+        gc.strokeRect(38, 3, 78, 22);
+        int x = 42;
+        for (int i = 0; i < lifes; i++){
+            gc.drawImage(heart, x, 6, 16, 16);
+            x+=27;
+        }
+    }
 
 
     private boolean checkObstacleCollision(int direction) {
@@ -161,25 +215,25 @@ public class Player {
             switch (direction) {
                 case 1 -> {
                     if (y - speed < obstacle.getY() + obstacle.getHeight() && y > obstacle.getY() &&
-                            x + 25 > obstacle.getX() && x < obstacle.getX() + obstacle.getWidth()) {
+                            x + 28 > obstacle.getX() && x < obstacle.getX() + obstacle.getWidth()) {
                         return true;
                     }
                 }
                 case 2 -> {
-                    if (y + 25 + speed > obstacle.getY() && y < obstacle.getY() &&
-                            x + 25 > obstacle.getX() && x < obstacle.getX() + obstacle.getWidth()) {
+                    if (y + 28 + speed > obstacle.getY() && y < obstacle.getY() &&
+                            x + 28 > obstacle.getX() && x < obstacle.getX() + obstacle.getWidth()) {
                         return true;
                     }
                 }
                 case 3 -> {
                     if (x - speed < obstacle.getX() + obstacle.getWidth() && x > obstacle.getX() &&
-                            y + 25 > obstacle.getY() && y < obstacle.getY() + obstacle.getHeight()) {
+                            y + 28 > obstacle.getY() && y < obstacle.getY() + obstacle.getHeight()) {
                         return true;
                     }
                 }
                 default -> {
-                    if (x + speed + 25 > obstacle.getX() && x + speed < obstacle.getX() + obstacle.getWidth() &&
-                            y + 25 > obstacle.getY() && y < obstacle.getY() + obstacle.getHeight()) {
+                    if (x + speed + 27 > obstacle.getX() && x + speed < obstacle.getX() + obstacle.getWidth() &&
+                            y + 27 > obstacle.getY() && y < obstacle.getY() + obstacle.getHeight()) {
                         return true;
                     }
                 }
@@ -188,5 +242,56 @@ public class Player {
         return false;
     }
 
+    public int[] calcularCoordenadaMasCercana(List<int[]> coordenadasPermitidas, int x, int y) {
+        int[] coordenadaMasCercana = null;
+        double distanciaMasCercana = Double.MAX_VALUE;
+
+        for (int[] coordenada : coordenadasPermitidas) {
+            double distancia = Math.sqrt(Math.pow(coordenada[0] - x, 2) + Math.pow(coordenada[1] - y, 2));
+
+
+            if (distancia < distanciaMasCercana) {
+                distanciaMasCercana = distancia;
+                coordenadaMasCercana = coordenada;
+            }
+        }
+        return coordenadaMasCercana;
+    }
+
+
+    public List<int[]> generarCoordenadasPermitidas(int minX, int minY, int maxX, int maxY, int stepX, int stepY) {
+        List<int[]> coordenadasPermitidas = new ArrayList<>();
+
+        for (int x = minX; x <= maxX; x += stepX) {
+            for (int y = minY; y <= maxY; y += stepY) {
+                int[] coordenada = {x, y};
+                coordenadasPermitidas.add(coordenada);
+            }
+        }
+        return coordenadasPermitidas;
+    }
+
+    public boolean touches(Item item) {
+        double playerCenterX = x + (29 / 2); // Calcula el centro del jugador en el eje X
+        double playerCenterY = y + (29 / 2); // Calcula el centro del jugador en el eje Y
+
+        double itemCenterX = item.getX() + (20 / 2); // Calcula el centro del ítem en el eje X
+        double itemCenterY = item.getY() + (20 / 2); // Calcula el centro del ítem en el eje Y
+
+        double distancia = Math.sqrt(Math.pow(playerCenterX - itemCenterX, 2) + Math.pow(playerCenterY - itemCenterY, 2));
+
+        // distancia máxima para considerar una colisión
+        double distanciaMaximaParaColision = 20.0;
+
+        return distancia <= distanciaMaximaParaColision;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
 }
 

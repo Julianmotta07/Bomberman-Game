@@ -8,6 +8,7 @@ public class KeyboardControl {
     public static boolean downPressed;
     public static boolean leftPressed;
     public static boolean rightPressed;
+    public static boolean spacePressed;
 
     public static void onKeyPressed(KeyEvent key) {
         switch (key.getCode()) {
@@ -24,6 +25,7 @@ public class KeyboardControl {
                 rightPressed = true;
                 break;
             case SPACE:
+                spacePressed = true;
                 break;
             default:
                 break;
@@ -45,6 +47,7 @@ public class KeyboardControl {
                 rightPressed = false;
                 break;
             case SPACE:
+                spacePressed = false;
                 break;
             default:
                 break;
