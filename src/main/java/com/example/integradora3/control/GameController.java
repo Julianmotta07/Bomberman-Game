@@ -86,14 +86,18 @@ public class GameController implements Initializable {
         List<Bomb> bombsToRemove = new ArrayList<>();
         for (Bomb bomba : player.getBombs()) {
             bomba.decrementTimer();
-            if (bomba.getTimer() <= 0) {
+            bomba.update();
+            if (!bomba.hasExploted() && bomba.getTimer() <= 0) {
                 bomba.explode(obstacles, items);
+            }
+            if (bomba.getExplosionTimer() <= 0 && bomba.getTimer() <= 0) {
                 bombsToRemove.add(bomba);
-                player.setActiveBombs(player.getActiveBombs()-1);
+                player.setActiveBombs(player.getActiveBombs() - 1);
             }
         }
         player.getBombs().removeAll(bombsToRemove);
     }
+
 
     public void paint(){
         player.draw();
@@ -143,7 +147,7 @@ public class GameController implements Initializable {
 
     public void createObstacles(){
         createStaticWalls();
-       createDestructibleWalls();
+        createDestructibleWalls();
     }
 
     public void createDestructibleWalls(){
@@ -185,15 +189,37 @@ public class GameController implements Initializable {
                                     296,297,298,312,313,314,315,316,317};
 
     private void createStaticWalls(){
-        Obstacle topEdge = new Obstacle(0,0,1010,32);
-        obstacles.add(topEdge);
-        Obstacle bottomEdge = new Obstacle(0,371,1010,30);
-        obstacles.add(bottomEdge);
-        Obstacle rightEdge = new Obstacle(931,32,32,362);
-        obstacles.add(rightEdge);
-        Obstacle leftEdge = new Obstacle(0,32,32,362);
-        obstacles.add(leftEdge);
-        int h = 32, w = 32, x = 61, y = 61;
+        //borde superior
+        int x = 31;
+        for (int i = 0; i < 29; i++){
+            Obstacle obstacle = new Obstacle(x,29,32,1);
+            obstacles.add(obstacle);
+            x+=31;
+        }
+        //borde inferior
+        x=31;
+        for (int i = 0; i < 29; i++){
+            Obstacle obstacle = new Obstacle(x,371,32,1);
+            obstacles.add(obstacle);
+            x+=31;
+        }
+        //borde izquierdo
+        int y = 31;
+        for (int i = 0; i < 11; i++){
+            Obstacle obstacle = new Obstacle(29,y,1,32);
+            obstacles.add(obstacle);
+            y+=31;
+        }
+        //borde derecho
+        y = 31;
+        for (int i = 0; i < 11; i++){
+            Obstacle obstacle = new Obstacle(929,y,1,32);
+            obstacles.add(obstacle);
+            y+=31;
+        }
+        x = 61;
+        y = 61;
+        int h = 32, w = 32;
         for (int i = 0; i < 14; i++) {
             Obstacle obstacle = new Obstacle(x,y,w,h);
             obstacles.add(obstacle);
