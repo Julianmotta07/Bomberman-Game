@@ -7,7 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MainMenu extends Application {
 
@@ -30,6 +32,10 @@ public class MainMenu extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static File getFile(String fileName) {
+        return new File(Objects.requireNonNull(MainMenu.class.getResource(fileName)).getPath());
     }
 
     public static void hideWindow(Stage stage){

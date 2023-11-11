@@ -1,5 +1,5 @@
 package com.example.integradora3.model;
 
-public enum ItemType {
+public enum PowerUpType {
     SPEED,STRONG,BOMB;
 }

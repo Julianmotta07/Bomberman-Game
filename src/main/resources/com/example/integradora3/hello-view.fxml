@@ -4,7 +4,7 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="716.0" stylesheets="@StartStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora3.control.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="716.0" stylesheets="@StartStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora3.control.Start">
    <children>
       <Button layoutX="239.0" layoutY="184.0" mnemonicParsing="false" onAction="#playButton" prefHeight="32.0" prefWidth="121.0" text="PLAY" />
       <Label fx:id="tittle" layoutX="261.0" layoutY="104.0" prefHeight="32.0" prefWidth="77.0" text="BOMBERMAN" textAlignment="CENTER">
