@@ -1,7 +1,6 @@
 package com.example.integradora3.model;
 
 import com.example.integradora3.MainMenu;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Explosion extends Entity{

@@ -33,9 +33,4 @@ public class PowerUp extends Entity{
     public Image getSpite(){
         return sprite;
     }
-
-    public void draw(GraphicsContext gc){
-
-        gc.drawImage(sprite,x,y,width,height);
-    }
 }

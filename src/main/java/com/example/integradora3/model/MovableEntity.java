@@ -5,11 +5,9 @@ import java.util.ArrayList;
 public abstract class MovableEntity extends Entity{
 
     protected int speed;
-    protected ArrayList<Wall> walls;
 
-    MovableEntity(int x, int y, ArrayList<Wall> walls){
+    MovableEntity(int x, int y){
         super(x,y,32,32);
-        this.walls = walls;
         speed = 1;
     }
 

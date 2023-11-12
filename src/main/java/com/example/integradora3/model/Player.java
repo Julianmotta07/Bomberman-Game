@@ -22,8 +22,8 @@ public class Player extends MovableEntity{
     private int speedPowerUpTime;
     private int strongPowerUpTime;
 
-    public Player(ArrayList<Wall> walls){
-        super(31, 31, walls);
+    public Player(){
+        super(31, 31);
         bombs = new ArrayList<>();
         direction = "down";
         spriteNum = 1;
@@ -61,7 +61,7 @@ public class Player extends MovableEntity{
         heart = new Image("file:"+MainMenu.getFile("images/heart-black.png").getPath());
     }
 
-    public void move() {
+    public void move(ArrayList<Wall> walls) {
 
         boolean upPressed = KeyboardControl.upPressed;
         boolean downPressed = KeyboardControl.downPressed;

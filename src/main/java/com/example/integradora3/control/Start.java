@@ -1,6 +1,6 @@
 package com.example.integradora3.control;
-import com.example.integradora3.MainMenu;
 
+import com.example.integradora3.MainMenu;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
