@@ -7,12 +7,12 @@ public class Stage {
 
     private ArrayList<Wall> walls;
     private ArrayList<Enemy> enemies;
-    private Door[] doors;
+    private Door door;
 
-    public Stage(ArrayList<Wall> walls,ArrayList<Enemy> enemies, Door[] doors) {
+    public Stage(ArrayList<Wall> walls,ArrayList<Enemy> enemies, Door door) {
         this.walls = new ArrayList<>(walls);
         this.enemies = new ArrayList<>(enemies);
-        this.doors = doors;
+        this.door = door;
     }
 
     public void drawEntities(GraphicsContext gc){
@@ -24,10 +24,10 @@ public class Stage {
         for (Enemy enemy : enemies){
             enemy.draw(gc);
         }
-        doors[0].draw(gc);
-        if (doors.length > 1){
-            doors[1].draw(gc);
+        if (enemies.isEmpty() && !door.isOpen()){
+            door.setOpen(true);
         }
+        door.draw(gc);
     }
 
     public void moveEnemies(Player player){
@@ -42,6 +42,10 @@ public class Stage {
 
     public ArrayList<Wall> getWalls(){
         return walls;
+    }
+
+    public Door getDoor(){
+        return door;
     }
 
 }

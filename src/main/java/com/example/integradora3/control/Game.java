@@ -67,9 +67,9 @@ public class Game implements Initializable {
 
     private void createStages(){
         stages = new Stage[3];
-        stages[0] = new Stage(createWalls(1),createEnemies(1),createDoors(1));
-        stages[1] = new Stage(createWalls(2),createEnemies(2),createDoors(2));
-        stages[2] = new Stage(createWalls(3),createEnemies(3),createDoors(3));
+        stages[0] = new Stage(createWalls(1),createEnemies(1),new Door(898,340,true));
+        stages[1] = new Stage(createWalls(2),createEnemies(2),new Door(898,340,true));
+        stages[2] = new Stage(createWalls(3),createEnemies(3),new Door(898,340,false));
     }
 
     private ArrayList<Wall> createWalls(int stage){
@@ -84,28 +84,24 @@ public class Game implements Initializable {
             case 1 -> {
                 enemies.add(new Enemy(400, 31, stage));
                 enemies.add(new Enemy(31, 340, stage));
+                enemies.add(new Enemy(649, 180, stage));
+                enemies.add(new Enemy(893, 31, stage));
+                enemies.add(new Enemy(465, 332, stage));
             }
-            case 2 -> enemies.add(new Enemy(400, 31, stage));
+            case 2 -> {
+                enemies.add(new Enemy(278, 31, stage));
+                enemies.add(new Enemy(31, 309, stage));
+                enemies.add(new Enemy(277, 247, stage));
+                enemies.add(new Enemy(402, 155, stage));
+                enemies.add(new Enemy(465, 320, stage));
+                enemies.add(new Enemy(649, 217, stage));
+                enemies.add(new Enemy(850, 31, stage));
+                enemies.add(new Enemy(894, 217, stage));
+
+            }
             default -> enemies.add(new Enemy(400, 31, stage));
         }
         return enemies;
-    }
-
-    private Door[] createDoors(int stage){
-        Door[] doors = new Door[stage == 2 ? 2 : 1];
-        switch (stage) {
-            case 1 -> {
-                doors[0]= new Door(898,340);
-            }
-            case 2 -> {
-                doors[0]= new Door(33,33);
-                doors[1]= new Door(898,340);
-            }
-            case 3 -> {
-                doors[0]= new Door(33,33);
-            }
-        }
-        return doors;
     }
 
     private void moveEntities(){
@@ -158,7 +154,6 @@ public class Game implements Initializable {
         player.getBombs().removeAll(bombsToRemove);
     }
 
-
     private void paintEntities(){
         player.draw(gc);
         stages[currentStage-1].drawEntities(gc);
@@ -198,6 +193,7 @@ public class Game implements Initializable {
     private void checkPlayerCollisions(){
         ArrayList<Entity> entities = new ArrayList<>(powerUps);
         entities.addAll(stages[currentStage-1].getEnemies());
+        entities.add(stages[currentStage-1].getDoor());
         for (Bomb bomb : player.getBombs()){
             entities.addAll(bomb.getExplosions());
         }
@@ -220,11 +216,17 @@ public class Game implements Initializable {
                         }
                     }
                     powerUpsRemove.add(powerUp);
+                } else if (entity instanceof Door){
+                    if (currentStage == 3 && stages[2].getDoor().isOpen()){
+                        System.out.println("you win");
+                    } else {
+                        switchStage();
+                    }
                 } else {
                     player.setLives(player.getLives()-1);
                     if (player.getLives() > 0){
-                        player.setX(32);
-                        player.setY(32);
+                        player.setX(31);
+                        player.setY(31);
                     } else {
                         System.out.println("game over");
                     }
@@ -234,33 +236,44 @@ public class Game implements Initializable {
         powerUps.removeAll(powerUpsRemove);
     }
 
+    private void switchStage(){
+        powerUps.clear();
+        player.setX(31);
+        player.setY(31);
+        if (currentStage == 1){
+            currentStage = 2;
+        } else if (currentStage == 2){
+            currentStage = 3;
+        }
+    }
+
     private ArrayList<Wall> createDestructibleWalls(int stage){
         ArrayList<Wall> walls = new ArrayList<>();
         int[] availableSpaces = switch (stage) {
-            case 1 -> new int[]{34, 36, 40, 42, 44, 46, 48, 52, 56,
-                    62, 63, 64, 65, 66, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86,
-                    88, 90, 92, 94, 98, 100, 102, 104, 106, 110, 114,
-                    122, 123, 124, 126, 127, 128, 134, 135, 136, 138, 139, 140, 142, 143,
-                    144, 148, 152, 156, 160, 164, 168, 172,
-                    176, 177, 178, 180, 181, 182, 184, 185, 186, 192, 193, 194, 196, 197, 198,
-                    206, 210, 214, 216, 218, 220, 222, 226, 228, 230, 232,
-                    234, 235, 236, 238, 239, 240, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255, 256, 257, 258, 259, 260, 261,
-                    264, 268, 272, 274, 276, 278, 280, 284, 286, 288,
-                    296, 297, 298, 312, 313, 314, 315, 316, 317
+            case 1 -> new int[]{3,4,5,6,7,8,16,17,18,19,20,
+                    32,34,36,40,42,46,48,52,56,
+                    59,60,61,62,63,64,65,66,68,69,70,71,72,74,75,76,77,78,80,81,82,84,85,86,
+                    88,90,92,94,98,100,104,106,110,114,
+                    126,127,128,138,139,140,142,143,
+                    144,148,152,156,160,164,168,172,
+                    176,177,178,180,181,182,192,193,194,
+                    206,210,214,216,220,222,226,228,230,232,
+                    234,235,236,238,239,240,242,243,244,245,246,248,249,250,251,252,254,255,256,257,258,259,260,261,
+                    264,268,272,274,278,280,284,286,288,
+                    300,301,302,303,304,312,313,314,315,316,317
             };
-            //delete 34
-            case 2 -> new int[]{36, 40, 42, 44, 46, 48, 52, 56,
-                    62, 63, 64, 65, 66, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86,
-                    88, 90, 92, 94, 98, 100, 102, 104, 106, 110, 114,
-                    122, 123, 124, 126, 127, 128, 134, 135, 136, 138, 139, 140, 142, 143,
-                    144, 148, 152, 156, 160, 164, 168, 172,
-                    176, 177, 178, 180, 181, 182, 184, 185, 186, 192, 193, 194, 196, 197, 198,
-                    206, 210, 214, 216, 218, 220, 222, 226, 228, 230, 232,
-                    234, 235, 236, 238, 239, 240, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 254, 255, 256, 257, 258, 259, 260, 261,
-                    264, 268, 272, 274, 276, 278, 280, 284, 286, 288,
-                    296, 297, 298, 312, 313, 314, 315, 316, 317
+            case 2 -> new int[]{3,4,6,12,13,14,20,21,21,22,
+                    32,38,40,42,46,50,54,56,
+                    59,60,61,62,64,66,67,68,70,71,72,74,75,76,78,79,80,
+                    88,90,96,100,104,108,112,114,116,
+                    124,125,126,132,133,134,140,141,142,143,144,145,
+                    146,148,150,152,154,158,162,168,170,172,174,
+                    175,176,177,178,179,180,186,187,188,198,199,200,
+                    204,206,208,216,218,220,224,228,232,
+                    244,245,246,248,249,250,252,253,254,260,261,
+                    264,266,270,274,278,282,284,288,
+                    298,299,300,306,307,308,310,311,312,313,314,316,317
             };
-            //delete 36
             default -> new int[]{34, 40, 42, 44, 46, 48, 52, 56,
                     62, 63, 64, 65, 66, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 80, 81, 82, 84, 85, 86,
                     88, 90, 92, 94, 98, 100, 102, 104, 106, 110, 114,
