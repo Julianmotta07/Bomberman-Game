@@ -5,36 +5,40 @@ import java.util.ArrayList;
 public abstract class MovableEntity extends Entity{
 
     protected int speed;
+    protected int spriteCounter;
+    protected int spriteNum;
 
     MovableEntity(int x, int y){
         super(x,y,32,32);
         speed = 1;
+        spriteNum = 1;
     }
 
-    protected boolean checkObstacleCollision(int direction, ArrayList<Wall> walls) {
-        for (Wall wall : walls) {
+    protected boolean checkObstacleCollision(int direction, ArrayList<Entity> obstacles) {
+        int size = 30;
+        for (Entity obstacle : obstacles) {
             switch (direction) {
                 case 1 -> {
-                    if (y - speed < wall.getY() + wall.getHeight() && y > wall.getY() &&
-                            x + 30 > wall.getX() && x < wall.getX() + wall.getWidth()) {
+                    if (y - speed < obstacle.y + obstacle.height && y > obstacle.y &&
+                            x + size > obstacle.x && x < obstacle.x + obstacle.width) {
                         return false;
                     }
                 }
                 case 2 -> {
-                    if (y + 30 + speed > wall.getY() && y < wall.getY() &&
-                            x + 30 > wall.getX() && x < wall.getX() + wall.getWidth()) {
+                    if (y + size + speed > obstacle.y && y < obstacle.y &&
+                            x + size > obstacle.x && x < obstacle.x + obstacle.width) {
                         return false;
                     }
                 }
                 case 3 -> {
-                    if (x - speed < wall.getX() + wall.getWidth() && x > wall.getX() &&
-                            y + 30 > wall.getY() && y < wall.getY() + wall.getHeight()) {
+                    if (x - speed < obstacle.x + obstacle.width && x > obstacle.x &&
+                            y + size > obstacle.y && y < obstacle.y + obstacle.height) {
                         return false;
                     }
                 }
                 default -> {
-                    if (x + speed + 30 > wall.getX() && x + speed < wall.getX() + wall.getWidth() &&
-                            y + 30 > wall.getY() && y < wall.getY() + wall.getHeight()) {
+                    if (x + speed + size > obstacle.x && x + speed < obstacle.x + obstacle.width &&
+                            y + size > obstacle.y && y < obstacle.y + obstacle.height) {
                         return false;
                     }
                 }
@@ -47,8 +51,8 @@ public abstract class MovableEntity extends Entity{
         double thisEntityCenterX = x + ((double) width / 2); // Centro de la entidad en el eje X
         double thisEntityCenterY = y + ((double) height / 2); // Centro de la entidad en el eje Y
 
-        double otherEntityCenterX = otherEntity.getX() + ((double) otherEntity.getWidth() / 2); // Centro de la otra entidad en el eje X
-        double otherEntityCenterY = otherEntity.getY() + ((double) otherEntity.getHeight() / 2); // Centro de la otra entidad en el eje Y
+        double otherEntityCenterX = otherEntity.x + ((double) otherEntity.width / 2); // Centro de la otra entidad en el eje X
+        double otherEntityCenterY = otherEntity.y + ((double) otherEntity.height / 2); // Centro de la otra entidad en el eje Y
 
         double distance = Math.sqrt(Math.pow(thisEntityCenterX - otherEntityCenterX, 2) + Math.pow(thisEntityCenterY - otherEntityCenterY, 2));
 

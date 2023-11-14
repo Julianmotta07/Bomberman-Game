@@ -27,6 +27,7 @@ public class Game implements Initializable {
     private ArrayList<PowerUp> powerUps;
     private Image[] itemsBar;
     private Stage[] stages;
+    private boolean gameOver = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -36,7 +37,7 @@ public class Game implements Initializable {
         canvas.setOnKeyReleased(KeyboardControl::onKeyReleased);
         initializeGame();
         Thread gameThread = new Thread(() -> {
-            while (true) {
+            while (!gameOver) {
                 Platform.runLater(() -> {
                     updateBombTimers();
                     updatePowerUps();
@@ -219,6 +220,7 @@ public class Game implements Initializable {
                 } else if (entity instanceof Door){
                     if (currentStage == 3 && stages[2].getDoor().isOpen()){
                         System.out.println("you win");
+                        gameOver = true;
                     } else {
                         switchStage();
                     }
@@ -229,6 +231,7 @@ public class Game implements Initializable {
                         player.setY(31);
                     } else {
                         System.out.println("game over");
+                        gameOver = true;
                     }
                 }
             }
@@ -296,7 +299,7 @@ public class Game implements Initializable {
                 }
             }
             if (createWall) {
-                DestructibleWall destructibleWall = new DestructibleWall(x, y, 32, 32);
+                DestructibleWall destructibleWall = new DestructibleWall(x, y, 32, 32,stage);
                 walls.add(destructibleWall);
             }
             x += 31;

@@ -30,9 +30,13 @@ public class Stage {
         door.draw(gc);
     }
 
-    public void moveEnemies(Player player){
-        for (Enemy enemy : enemies){
-            enemy.moveTowardsPlayer(player,walls);
+    public void moveEnemies(Player player) {
+        ArrayList<Entity> entities = new ArrayList<>(walls);
+        for (Enemy enemy : enemies) {
+            ArrayList<Enemy> otherEnemies = new ArrayList<>(enemies);
+            otherEnemies.remove(enemy);
+            entities.addAll(otherEnemies);
+            enemy.moveTowardsPlayer(player, entities);
         }
     }
 

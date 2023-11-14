@@ -12,8 +12,6 @@ public class Player extends MovableEntity{
     private boolean spacePressedLastFrame = false;
     private Image up1, up2, down1, down2, left1, left2, right1, right2, stop, heart;
     private String direction;
-    private int spriteCounter;
-    private int spriteNum;
     private int lives;
     private int maxBombs;
     private int bombsLevel;
@@ -63,6 +61,8 @@ public class Player extends MovableEntity{
 
     public void move(ArrayList<Wall> walls) {
 
+        ArrayList<Entity> entityWalls = new ArrayList<>(walls);
+
         boolean upPressed = KeyboardControl.upPressed;
         boolean downPressed = KeyboardControl.downPressed;
         boolean leftPressed = KeyboardControl.leftPressed;
@@ -72,23 +72,23 @@ public class Player extends MovableEntity{
         if (upPressed || downPressed || leftPressed || rightPressed || spacePressed){
 
             if (upPressed) {
-                if (checkObstacleCollision(1, walls)){
+                if (checkObstacleCollision(1, entityWalls)){
                     y -= speed;
                 }
                 direction = "up";
             } else if (downPressed) {
-                if (checkObstacleCollision(2, walls)){
+                if (checkObstacleCollision(2, entityWalls)){
                     y += speed;
                 }
                 direction = "down";
             }
             if (leftPressed) {
-                if (checkObstacleCollision(3, walls)){
+                if (checkObstacleCollision(3, entityWalls)){
                     x -= speed;
                 }
                 direction = "left";
             } else if (rightPressed) {
-                if (checkObstacleCollision(4, walls)){
+                if (checkObstacleCollision(4, entityWalls)){
                     x += speed;
                 }
                 direction = "right";
