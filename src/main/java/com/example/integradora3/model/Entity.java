@@ -22,6 +22,8 @@ public class Entity {
         gc.drawImage(sprite,x,y,width,height);
     }
 
+
+
     public int getX() {
         return x;
     }

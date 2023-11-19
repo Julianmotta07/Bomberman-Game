@@ -54,6 +54,8 @@ public class Enemy extends MovableEntity{
         }
     }
 
+
+
     public void draw(GraphicsContext gc) {
         Image image;
         if (spriteNum == 1) {
