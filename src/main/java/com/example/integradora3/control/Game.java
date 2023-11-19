@@ -61,7 +61,7 @@ public class Game implements Initializable {
     }
 
     private void initializeGame(){
-        currentStage = 3;
+        currentStage = 1;
         powerUps = new ArrayList<>();
         player = new Player();
         bombsNum.setText("1");
@@ -95,8 +95,7 @@ public class Game implements Initializable {
         int secondStageEnemies = numberOfEnemies.nextInt(8)+1;
 
         int  thirdStageEnemies = numberOfEnemies.nextInt(11)+1;
-
-       // System.out.println("enemigos aleatorios: "+thirdStageEnemies); Solo comprobaba que fueran aleatorios
+        
 
         switch (stage) {
 
@@ -135,7 +134,7 @@ public class Game implements Initializable {
             }
             default -> {
 
-               for (int i = 0; i < 2; i++) {
+               for (int i = 0; i < thirdStageEnemies; i++) {
 
                     switch (i) {
 
