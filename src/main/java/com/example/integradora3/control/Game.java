@@ -135,7 +135,7 @@ public class Game implements Initializable {
             }
             default -> {
 
-               for (int i = 0; i < thirdStageEnemies; i++) {
+               for (int i = 0; i < 2; i++) {
 
                     switch (i) {
 
@@ -272,13 +272,15 @@ public class Game implements Initializable {
                     powerUpsRemove.add(powerUp);
                 } else if (entity instanceof Door){
                     if (currentStage == 3 && stages[2].getDoor().isOpen()){
-                        System.out.println("you win");
-                        gameOver = true;
+
+                        showWindowToWin();
+
                     } else {
                         switchStage();
                     }
                 } else {
                     player.setLives(player.getLives()-1);
+
                     if (player.getLives() > 0){
                         player.setX(31);
                         player.setY(31);
@@ -301,6 +303,20 @@ public class Game implements Initializable {
 
             MainMenu.hideWindow(((javafx.stage.Stage) canvas.getScene().getWindow()));
             gameO.loseGame();
+
+        });
+    }
+
+    private void showWindowToWin() {
+
+        gameOver = true;
+
+        Final gameWon = new Final();
+
+        Platform.runLater(() -> {
+
+            MainMenu.hideWindow(((javafx.stage.Stage) canvas.getScene().getWindow()));
+            gameWon.finalGame();
 
         });
     }
