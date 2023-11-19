@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.integradora3.control.GameOver"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="716.0" stylesheets="@GameOStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora3.control.GameOver">
+    <children>
+        <Button fx:id="restart" layoutX="600.0" layoutY="264.0" mnemonicParsing="false" onAction="#onRestartButton" prefHeight="38.0" prefWidth="80.0" text="RESTART" textFill="#fffefe">
+            <font>
+                <Font name="Dubai Bold" size="12.0" />
+            </font>
+            <style>
+                -fx-background-color: #DC143C;
+            </style>
+        </Button>
+      <Button fx:id="exitButton" layoutX="600.0" layoutY="313.0" mnemonicParsing="false" onAction="#onExitButton" prefHeight="38.0" prefWidth="80.0" text="EXIT" textFill="#fffdfd">
+         <font>
+            <Font name="Dubai Bold" size="12.0" />
+         </font>
+          <style>
+              -fx-background-color: #DC143C;
+          </style>
+      </Button>
 
+    </children>
 </AnchorPane>

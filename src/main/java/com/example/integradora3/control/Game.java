@@ -3,6 +3,7 @@ package com.example.integradora3.control;
 import com.example.integradora3.KeyboardControl;
 import com.example.integradora3.MainMenu;
 import com.example.integradora3.model.*;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
+
+
 
 public class Game implements Initializable {
 
@@ -280,13 +283,26 @@ public class Game implements Initializable {
                         player.setX(31);
                         player.setY(31);
                     } else {
-                        System.out.println("game over");
-                        gameOver = true;
+
+                        showGameOver();
                     }
                 }
             }
         }
         powerUps.removeAll(powerUpsRemove);
+    }
+
+    private void showGameOver() {
+
+        gameOver = true;
+
+        GameOver gameO = new GameOver();
+        Platform.runLater(() -> {
+
+            MainMenu.hideWindow(((javafx.stage.Stage) canvas.getScene().getWindow()));
+            gameO.loseGame();
+
+        });
     }
 
     private void switchStage(){

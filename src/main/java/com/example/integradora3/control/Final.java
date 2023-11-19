@@ -10,25 +10,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Final implements Initializable {
+public class Final {
 
-    @FXML
-    private Button tryAgain;
 
-    @FXML
-    protected void tryButton() {
-
-        MainMenu.showWindow("game-view", null);
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
-
-    @FXML
-    public void restartGame() {
-
-        MainMenu.showWindow("screenView/hello-view", (Stage) tryAgain.getScene().getWindow());
-    }
 }

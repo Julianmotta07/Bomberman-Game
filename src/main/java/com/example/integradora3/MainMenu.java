@@ -41,13 +41,6 @@ public class MainMenu extends Application {
         stage.hide();
     }
 
-    public static void informationWindow(String text){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
-        alert.setHeaderText(null);
-        alert.setContentText(text);
-        alert.showAndWait();
-    }
 
     public static void main(String[] args) {
         launch();

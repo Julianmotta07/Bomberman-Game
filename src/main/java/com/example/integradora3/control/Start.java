@@ -9,10 +9,13 @@ public class Start {
 
     @FXML
     private Label tittle;
+
     @FXML
     protected void playButton() {
             MainMenu.hideWindow((Stage)tittle.getScene().getWindow());
             MainMenu.showWindow("game-view", null);
     }
+
+
 
 }
