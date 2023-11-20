@@ -3,13 +3,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="716.0" stylesheets="@StartStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora3.control.Start">
    <children>
-      <Button layoutX="239.0" layoutY="184.0" mnemonicParsing="false" onAction="#playButton" prefHeight="32.0" prefWidth="121.0" text="PLAY" />
-      <Label fx:id="tittle" layoutX="261.0" layoutY="104.0" prefHeight="32.0" prefWidth="77.0" text="BOMBERMAN" textAlignment="CENTER">
+      <Button layoutX="239.0" layoutY="199.0" mnemonicParsing="false" onAction="#playButton" prefHeight="32.0" prefWidth="121.0" text="PLAY" textFill="#fffafa">
+         <font>
+            <Font name="Segoe UI Black" size="23.0" />
+         </font>
+         <style>
+            -fx-background-color: #4169E1;
+         </style>
+
+      </Button>
+
+      <Label fx:id="tittle" layoutX="223.0" layoutY="105.0" prefHeight="32.0" prefWidth="153.0" text="BOMBERMAN" textAlignment="CENTER" textFill="#fffafa00">
          <effect>
             <Glow level="0.37" />
-         </effect></Label>
+         </effect>
+         <font>
+            <Font name="Wingdings 2" size="20.0" />
+         </font></Label>
    </children>
 </AnchorPane>

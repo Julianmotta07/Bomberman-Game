@@ -90,11 +90,11 @@ public class Game implements Initializable {
 
         Random numberOfEnemies = new Random();
 
-        int firstStageEnemies = numberOfEnemies.nextInt(5)+1;
+        int firstStageEnemies = 3+numberOfEnemies.nextInt((5+1)-3);
 
-        int secondStageEnemies = numberOfEnemies.nextInt(8)+1;
+        int secondStageEnemies = 3+numberOfEnemies.nextInt((8+1)-3);
 
-        int  thirdStageEnemies = numberOfEnemies.nextInt(11)+1;
+        int  thirdStageEnemies = 3+numberOfEnemies.nextInt((11+1)-3);
         
 
         switch (stage) {
@@ -139,16 +139,16 @@ public class Game implements Initializable {
                     switch (i) {
 
                         case 0  -> enemies.add(new Enemy(400, 31, stage));
-                        case 1  -> enemies.add(new Enemy(159, 279, stage));
+                        case 1  -> enemies.add(new Enemy(159, 341, stage));
                         case 2  -> enemies.add(new Enemy(154, 123, stage));
                         case 3  -> enemies.add(new Enemy(739, 32, stage));
-                        case 4  -> enemies.add(new Enemy(588, 155, stage));
-                        case 5  -> enemies.add(new Enemy(891, 153, stage));
-                        case 6  -> enemies.add(new Enemy(649, 340, stage));
-                        case 7  -> enemies.add(new Enemy(463, 154, stage));
-                        case 8  -> enemies.add(new Enemy(525, 218, stage));
+                        case 4  -> enemies.add(new Enemy(651, 217, stage));
+                        case 5  -> enemies.add(new Enemy(891, 155, stage));
+                        case 6  -> enemies.add(new Enemy(649, 341, stage));
+                        case 7  -> enemies.add(new Enemy(460, 155, stage));
+                        case 8  -> enemies.add(new Enemy(463, 341, stage));
                         case 9  -> enemies.add(new Enemy(402, 341, stage));
-                        case 10 -> enemies.add(new Enemy(837, 279, stage));
+                        case 10 -> enemies.add(new Enemy(898, 341, stage));
                     }
                 }
 
@@ -359,14 +359,14 @@ public class Game implements Initializable {
                     298,299,300,306,307,308,310,311,312,313,314,316,317
             };
             default -> new int[]{6,7, 8, 9, 10,15,16,17,18,19,20,25,26,27,28,29,
-                    36,38, 44 , 46,48,54,55,56,58,
+                    36,38, 42, 44 , 46,48,54,55,56,58,
                     64, 65,66,67,68,70,72,73,74,75, 76,77,78,83,84,85,86,87,
-                    94,96,102, 104, 106, 112,114, 116,
-                    117,118, 119,120,121,122,123,124,125,126,132,133,134,
-                    146,148,150,152,154, 156, 160,162, 164, 168,170, 172, 174,
-                    175,176, 177, 178,179,180, 181, 182, 183,184, 185, 186,188,189,190, 192, 193, 194, 196, 197, 198,199,200, 201,202,203,
+                    94,96,102, 104, 106, 110, 112,114, 116,
+                    117,118, 119,120,121,122,123,124,125,126,132,133,134,138,
+                    146,148,150,152,154, 156, 158, 160,162, 164, 168,170, 172, 174,
+                    175,176, 177, 178,179,180, 181, 182, 183,184, 185, 186, 187, 188,189,190, 192, 193, 194, 196, 197, 198,199,200, 201,202,203,
                     204,206, 208,210,212, 214,218, 222, 226, 228, 230, 232,
-                    233, 234,235, 236, 242, 243, 244, 246, 247, 248, 250, 251, 252, 254, 255, 256, 257, 258,
+                    233, 234,235, 236, 238, 239, 240, 242, 243, 244, 246, 247, 248, 250, 251, 252, 254, 255, 256, 257, 258,
                     262,264, 268, 272,276, 280, 284, 286,
                     291,292,293,294,296, 297, 298, 312, 313, 314, 315, 316
             };
