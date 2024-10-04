@@ -189,7 +189,7 @@ public class Game implements Initializable {
                 x += 30;
             }
         }
-        bombsNum.setText(String.valueOf(player.getMaxBombs()- player.getActiveBombs()));
+        bombsNum.setText(String.valueOf(player.getMaxBombs() - player.getActiveBombs()));
     }
 
     private void updateBombTimers() {

@@ -21,6 +21,7 @@ public class GameOver {
 
         MainMenu.showWindow("gameOver-view",null);
     }
+
     @FXML
     public void onRestartButton() {
 
